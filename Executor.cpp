@@ -23,7 +23,7 @@ process::process(command thisCom, pid_t thisPid)
 
 int executor::runCom(command& thisCom,BuildIn& shellBuild)
 {
-    pid_t myPid[10];
+    int myPid[10];
     int cpos=0,rpos=0;
     if(cpos>=thisCom.tokLen) return(0);
     char path[]="/bin:/usr/bin:./";
@@ -89,20 +89,22 @@ int executor::runCom(command& thisCom,BuildIn& shellBuild)
             else
             {
                 if(debugmode) cout<<"This is father after "<<rpos<<" fork\n";
-                if(debugmode) cout<<"Return from wait "<<rpos<<"\n";
                 rpos++;
             }
         }
 
         if(debugmode) cout<<"Father return after wait\n";
+
+
+
+
         string comName="";
         for (int i=0; i<thisCom.tokLen; i++)
         {
             if (i!=0) comName+=" ";
             comName+=thisCom.toks[i]->tok;
         }
-
-        myPid[thisCom.pipeLen]=-1;
+        for(int i=thisCom.pipeLen; i<10; i++) myPid[i]=-1;
         int fd[2],fd2[2];
         if(thisCom.pipeLen<3)
         {
@@ -122,7 +124,7 @@ int executor::runCom(command& thisCom,BuildIn& shellBuild)
             fd[0]=pipef.pipefd[0][0];
             fd[1]=pipef.pipefd[0][1];
         }
-        shellBuild.waitingfor(comName,myPid,fd,fd2);
+        shellBuild.waitingFor(comName,myPid,fd,fd2);
         inRed.reSet();
         outRed.reSet();
         }
