@@ -3,6 +3,7 @@
 #include "Interpreter.h"
 #include "Executor.h"
 #include "BuildIn.h"
+#include "signal.h"
 
 bool debugmode=false;
 
@@ -15,6 +16,10 @@ int main()
         shellBuild=new BuildIn();
         executor shellExc;
         string cwd=shellBuild->getCurrentDic();
+        signal(SIGINT,SIG_IGN);
+        signal(SIGTERM,SIG_IGN);
+        signal(SIGQUIT,SIG_IGN);
+        signal(SIGTSTP,SIG_IGN);
         cout<<"[3150 shell:"<<cwd<<"]$ ";
         while(getline(cin,newCom))
         {
