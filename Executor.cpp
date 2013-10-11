@@ -49,6 +49,7 @@ int executor::runCom(command& thisCom,BuildIn& shellBuild)
         inRed.checkRed(thisCom,cpos,thisCom.tokLen);
         outRed.checkRed(thisCom,cpos,thisCom.tokLen);
         thisCom.getAllRecur(cpos);
+        outRed.checkRed(thisCom,cpos,thisCom.tokLen);
         pipef.creatPipe(thisCom.pipeLen-1);
         //cout<<rpos<<" "<<thisCom.tokLen<<"\n";
         while(rpos<thisCom.pipeLen)
@@ -90,16 +91,40 @@ int executor::runCom(command& thisCom,BuildIn& shellBuild)
                 if(debugmode) cout<<"This is father after "<<rpos<<" fork\n";
                 if(debugmode) cout<<"Return from wait "<<rpos<<"\n";
                 rpos++;
-                inRed.reSet();
-                outRed.reSet();
             }
         }
-    }
-    if(debugmode) cout<<"Father return after wait\n";
 
-    waitpid(myPid[0],NULL,WUNTRACED);
-    close(pipef.pipefd[0][1]);
-    waitpid(myPid[1],NULL,WUNTRACED);
-    close(pipef.pipefd[0][0]);
-    return 0;
+        if(debugmode) cout<<"Father return after wait\n";
+        string comName="";
+        for (int i=0; i<thisCom.tokLen; i++)
+        {
+            if (i!=0) comName+=" ";
+            comName+=thisCom.toks[i]->tok;
+        }
+
+        myPid[thisCom.pipeLen]=-1;
+        int fd[2],fd2[2];
+        if(thisCom.pipeLen<3)
+        {
+            fd2[0]=-1; fd2[1]=-1;
+        }
+        else
+        {
+            fd2[0]=pipef.pipefd[1][0];
+            fd2[1]=pipef.pipefd[1][1];
+        }
+        if(thisCom.pipeLen<2)
+        {
+            fd[0]=-1; fd[1]=-1;
+        }
+        else
+        {
+            fd[0]=pipef.pipefd[0][0];
+            fd[1]=pipef.pipefd[0][1];
+        }
+        shellBuild.waitingfor(comName,myPid,fd,fd2);
+        inRed.reSet();
+        outRed.reSet();
+        }
+        return 0;
 }
