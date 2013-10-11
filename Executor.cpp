@@ -6,6 +6,7 @@
 #include <string.h>
 #include <glob.h>
 #include <errno.h>
+#include <signal.h>
 
 extern bool debugmode;
 extern int debugfd;
@@ -62,6 +63,8 @@ int executor::runCom(command& thisCom,BuildIn& shellBuild)
             }
             else if(myPid[rpos]==0)
             {
+                signal(SIGINT,SIG_DFL);
+                signal(SIGTSTP,SIG_DFL);
                 if(debugmode) cout<<"This is child "<<rpos<<"\n";
                 //cout<<"1 in "<<rpos<<"\n";
                 pipef.setPipe(rpos);
