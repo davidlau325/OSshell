@@ -3,7 +3,7 @@
 #include "Interpreter.h"
 #include "Executor.h"
 
-bool debugmode=true;
+bool debugmode=false;
 
 int main()
 {

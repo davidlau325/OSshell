@@ -273,7 +273,7 @@ void command::getNextCom(int& cpos)
 {
     if(cpos>=tokLen) return;
 
-    //if(debugmode) cout<<"In getNextCom\n";
+    if(debugmode) cout<<"In getNextCom\n";
     token *next;
 
     int apos=0;
@@ -284,6 +284,7 @@ void command::getNextCom(int& cpos)
         cout<<"No command found at getNextCom\n";
         return;
     }
+    if(debugmode)cout<<toks[cpos]->tokc<<"\n";
     pipeCom[pipeLen]=toks[cpos]->tokc;
     pipeArg[pipeLen][apos]=toks[cpos]->tokc;
     cpos++;
