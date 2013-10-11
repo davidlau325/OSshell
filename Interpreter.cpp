@@ -25,6 +25,7 @@ command  : 5
 #include "Interpreter.h"
 #include <string.h>
 #include <glob.h>
+#include <stdlib.h>
 
 extern bool debugmode;
 extern int debugfd;
@@ -220,6 +221,11 @@ token::token(string &t)
 	tokc=new char(t.length()+2);
 	strcpy(tokc,t.c_str());
 	cat=checkCat();
+}
+
+token::~token()
+{
+    free(tokc);
 }
 
 

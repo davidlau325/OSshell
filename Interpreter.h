@@ -38,6 +38,7 @@ public:
 	token();
 	token(string&);
 	int checkCat();
+	~token();
 };
 
 
