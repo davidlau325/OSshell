@@ -87,11 +87,16 @@ void BuildIn::waitingFor(string command, int pid[], int fd[], int fd2[]){
 
 void BuildIn::handleFG(command thisCommand){
     if(thisCommand.tokLen==2){
-    int index=atoi(thisCommand.toks[1]->tok.c_str());   
-    if(index<numJob || index >0){
+    int index=atoi(thisCommand.toks[1]->tok.c_str());  
+    cout << numJob << "\n";
+    if(index<numJob && index >0){
         Jobs* head=jobs;
+        Jobs* previous=jobs;
         for(int i=0;i<index;i++){
             head=head->next;
+            if(i>0){
+                previous=previous->next;
+            }
         }
         string cCommand;
         int cfd[2]={-1,-1};
@@ -107,7 +112,7 @@ void BuildIn::handleFG(command thisCommand){
             cpids[j]=head->pids[j];
             if(head->pids[j]!=-1){
             cout << "Job wake up: " << head->command << "\n";
-            if(kill(head->pids[0],SIGCONT)==-1){
+            if(kill(head->pids[j],SIGCONT)==-1){
                 cout << "Error: Cannot send kill signal\n";
             }
             }
@@ -115,17 +120,7 @@ void BuildIn::handleFG(command thisCommand){
         if(head->next==NULL){
             free(head);
         }else{
-            Jobs* temp=head->next;
-            head->command=temp->command;
-            head->pids[0]=temp->pids[0];
-            head->pids[1]=temp->pids[1];
-            head->pids[2]=temp->pids[2];
-            head->fd[0]=temp->fd[0];
-            head->fd[1]=temp->fd[1];
-            head->fd2[0]=temp->fd2[0];
-            head->fd2[1]=temp->fd2[1];
-            head->next=temp->next;
-            free(temp);
+            previous->next=head->next;
         }
         numJob--;
         waitingFor(cCommand,cpids,cfd,cfd2);
