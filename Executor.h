@@ -22,7 +22,7 @@ class executor
     outRedirection outRed;
     pipeArr pipef;
     public:
-    int runCom(command&);
+    int runCom(command&,BuildIn&);
     void excute(command&,int);
 };
 #endif

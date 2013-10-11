@@ -1,4 +1,5 @@
 #include "Executor.h"
+#include "BuildIn.h"
 #include <unistd.h>
 #include <stdlib.h>
 #include <sys/wait.h>
@@ -20,14 +21,27 @@ process::process(command thisCom, pid_t thisPid)
     shellPid=thisPid;
 }
 
-int executor::runCom(command& thisCom)
+int executor::runCom(command& thisCom,BuildIn& shellBuild)
 {
     pid_t myPid[10];
     int cpos=0,rpos=0;
     if(cpos>=thisCom.tokLen) return(0);
     char path[]="/bin:/usr/bin:./";
     setenv("PATH",path,1);
-    if(thisCom.toks[0]->cat==8)
+
+    if(thisCom.toks[0]->cat==9){
+        if(thisCom.toks[0]->tok.compare("cd")==0){
+            shellBuild.handleCD(thisCom);
+        }else if(thisCom.toks[0]->tok.compare("exit")==0){
+            shellBuild.handleExit(thisCom);
+        }else if(thisCom.toks[0]->tok.compare("fg")==0){
+            shellBuild.handleFG(thisCom);
+        }else if(thisCom.toks[0]->tok.compare("jobs")==0){
+            shellBuild.handleJobs(thisCom);
+        }else{
+            cout << "Error: Invalid Build-In\n";
+        }
+    }else if(thisCom.toks[0]->cat==8)
     {
         thisCom.getNextCom(cpos);
         inRed.checkRed(thisCom,cpos,thisCom.tokLen);
