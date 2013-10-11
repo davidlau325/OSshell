@@ -27,6 +27,7 @@ command  : 5
 #include <glob.h>
 
 extern bool debugmode;
+extern int debugfd;
 
 string comSym[16]={ "E", "Pipe", "Redirect Input", "Redirect Output", "Redirect Output", "E", "E", "Argument", "Command Name", "Built-in Command", "Input Filename", "Output Filename","Argument" };
 command::command()

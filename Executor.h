@@ -2,7 +2,6 @@
 #define _EXCUTOR
 #include "Interpreter.h"
 #include "IORedirect.h"
-#include "BuildIn.h"
 #include <sys/types.h>
 
 class process
@@ -23,7 +22,7 @@ class executor
     outRedirection outRed;
     pipeArr pipef;
     public:
-    int runCom(command&,BuildIn&);
+    int runCom(command&);
     void excute(command&,int);
 };
 #endif

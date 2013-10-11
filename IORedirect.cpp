@@ -7,6 +7,7 @@
 
 
 extern bool debugmode;
+extern int debugfd;
 
 void inRedirection::checkRed(command &thisCom, int &cpos,int tokLen)
 {
@@ -97,7 +98,7 @@ int outRedirection::setOutRed()
     if (debugmode) cout<<"setOutRed start\n";
     int outfd;
     if (!redirectionStatus) return 0;
-    cout<<"Setting output redirection\n";
+    if (debugmode) cout<<"Setting output redirection\n";
     if(reWrite) outfd=open(outFile,O_WRONLY|O_CREAT|O_TRUNC,00700);
     else outfd=open(outFile,O_WRONLY|O_APPEND|O_CREAT,00700);
     if (outfd==-1)
@@ -147,21 +148,25 @@ bool pipeArr::creatPipe(int num)
 
 bool pipeArr::setPipe(int comPos)
 {
-    cout<<"Set pipe "<<comPos<<"\n";
-    if(comPos>=pipeNum) return true;
+    if(debugmode)cout<<"Set pipe "<<comPos<<"\n";
+    cout<<comPos<<" "<<pipeNum<<"\n";
+    if(pipeNum==0) return true;
     if(comPos==0)
     {
-        close(pipefd[0][0]);
+        if(debugmode) cout<<"Set the first pipe\n";
+        close(pipefd[comPos][0]);
         close(STDOUT_FILENO);
-        if(dup2(pipefd[0][1],STDOUT_FILENO)==-1)
+        if(dup2(pipefd[comPos][1],STDOUT_FILENO)==-1)
         {
             cout<<"setPipe fail\n";
             return false;
         }
-        close(pipefd[0][1]);
+        if(debugmode) cout<<"Set the first pipe finish\n";
+        close(pipefd[comPos][1]);
     }
-    if(comPos==pipeNum)
+    else if(comPos==pipeNum)
     {
+        if(debugmode) cout<<"Set the last pipe\n";
         close(pipefd[comPos-1][1]);
         close(STDIN_FILENO);
         if (dup2(pipefd[comPos-1][0],STDIN_FILENO)==-1)
@@ -169,6 +174,8 @@ bool pipeArr::setPipe(int comPos)
             cout<<"setPipe fail\n";
             return false;
         }
+
+        if(debugmode) cout<<"Set the last pipe finish\n";
         close(pipefd[comPos-1][0]);
     }
     else
