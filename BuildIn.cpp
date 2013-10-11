@@ -66,10 +66,6 @@ void BuildIn::handleExit(command thisCommand){
 
 void BuildIn::waitingFor(string command, int pid[], int fd[], int fd2[]){
     int status;
-    if(fd[1]!=-1){close(fd[1]);}
-    if(fd[0]!=-1){close(fd[0]);}
-    if(fd2[1]!=-1){close(fd2[1]);}
-    if(fd2[0]!=-1){close(fd2[0]);}
     for(int i=0;i<3;i++){
         if(pid[i]!=-1){
             if(waitpid(pid[i],&status,WUNTRACED)!=pid[i]){
@@ -78,6 +74,19 @@ void BuildIn::waitingFor(string command, int pid[], int fd[], int fd2[]){
                 if(WIFSTOPPED(status)){
                     if(i==0){
                         storeJob(command,pid,fd,fd2);
+                    }
+                }else{
+                    switch(i){
+                        case 0:
+                            if(fd[1]!=-1){close(fd[1]);}
+                            break;
+                        case 1:
+                            if(fd[0]!=-1){close(fd[0]);}
+                            if(fd2[1]!=-1){close(fd2[1]);}
+                            break;
+                        case 2:
+                            if(fd2[0]!=-1){close(fd2[0]);}
+                            break;
                     }
                 }
             }
@@ -89,7 +98,7 @@ void BuildIn::handleFG(command thisCommand){
     if(thisCommand.tokLen==2){
     int index=atoi(thisCommand.toks[1]->tok.c_str());  
     cout << numJob << "\n";
-    if(index<numJob && index >0){
+    if(index<=numJob && index >0){
         Jobs* head=jobs;
         Jobs* previous=jobs;
         for(int i=0;i<index;i++){
