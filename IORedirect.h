@@ -22,6 +22,7 @@ class inRedirection
     void checkRed(command&, int&,int);
     inRedirection();
     int setInRed();
+    void reSet();
 };
 
 class outRedirection
@@ -33,6 +34,7 @@ class outRedirection
     void checkRed(command&, int&,int);
     int setOutRed();
     outRedirection();
+    void reSet();
 };
 
 class pipeArr

@@ -27,14 +27,20 @@ int executor::runCom(command& thisCom)
     if(thisCom.toks[0]->cat==8)
     {
         thisCom.getNextCom(cpos);
+        cout<<thisCom.pipeLen<<"\n";
         inRed.checkRed(thisCom,cpos,thisCom.tokLen);
+        cout<<thisCom.pipeLen<<"\n";
         outRed.checkRed(thisCom,cpos,thisCom.tokLen);
+        cout<<thisCom.pipeLen<<"\n";
         inRed.checkRed(thisCom,cpos,thisCom.tokLen);
+        cout<<thisCom.pipeLen<<"\n";
         outRed.checkRed(thisCom,cpos,thisCom.tokLen);
+        cout<<thisCom.pipeLen<<"\n";
         thisCom.getAllRecur(cpos);
+        cout<<thisCom.pipeLen<<"\n";
         //pipef.creatPipe(thisCom.pipeLen-1);
         //cout<<rpos<<" "<<thisCom.tokLen<<"\n";
-        while(rpos<thisCom.tokLen)
+        while(rpos<thisCom.pipeLen)
         {
             myPid=fork();
             if (myPid==-1)
@@ -52,8 +58,8 @@ int executor::runCom(command& thisCom)
                     if(inRed.setInRed()!=0) exit(-1);
                 if(rpos==thisCom.pipeLen-1)
                     if(outRed.setOutRed()!=0) exit(-1);
-                if(debugmode) cout<<"Child "<<rpos<<" jump to new process\n";
-                if(debugmode) cout<<thisCom.pipeArg[rpos][0]<<"\n";
+                //if(debugmode) cout<<"Child "<<rpos<<" jump to new process\n";
+                //if(debugmode) cout<<thisCom.pipeArg[rpos][0]<<"\n";
                 if(execvp(thisCom.pipeArg[rpos][0],thisCom.pipeArg[rpos])==-1)
                 {
                     if(errno==ENOENT)
@@ -62,10 +68,10 @@ int executor::runCom(command& thisCom)
                     }
                     else
                     {
-                        cout<<thisCom.pipeArg[rpos][0]<<": unknown error";
+                        cout<<thisCom.pipeArg[rpos][0]<<": unknown error\n";
                     }
-                    exit(-1);
                 }
+                exit(-1);
             }
             else
             {
@@ -74,6 +80,8 @@ int executor::runCom(command& thisCom)
                 wait(NULL);
                 //
                 rpos++;
+                inRed.reSet();
+                outRed.reSet();
             }
         }
     }

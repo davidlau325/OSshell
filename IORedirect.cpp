@@ -34,6 +34,7 @@ int inRedirection::setInRed()
     if (debugmode) cout<<"setInRed start\n";
     int infd;
     if (!redirectionStatus) return(0);
+    if(debugmode) cout<<"Setting input redirection\n";
     infd=open(inFile,O_RDONLY,0400);
     if (infd==-1)
     {
@@ -49,8 +50,16 @@ int inRedirection::setInRed()
         }
         else return(-3);
     }
+    close(STDIN_FILENO);
     if(dup2(infd,STDIN_FILENO)==-1) return -4;
+    close(infd);
     return(0);
+}
+
+void inRedirection::reSet()
+{
+    redirectionStatus=false;
+    inFile=NULL;
 }
 
 outRedirection::outRedirection()
@@ -88,6 +97,7 @@ int outRedirection::setOutRed()
     if (debugmode) cout<<"setOutRed start\n";
     int outfd;
     if (!redirectionStatus) return 0;
+    cout<<"Setting output redirection\n";
     if(reWrite) outfd=open(outFile,O_WRONLY|O_CREAT|O_TRUNC,00700);
     else outfd=open(outFile,O_WRONLY|O_APPEND|O_CREAT,00700);
     if (outfd==-1)
@@ -103,13 +113,20 @@ int outRedirection::setOutRed()
             return(-3);
         }
     }
+    close(STDOUT_FILENO);
     if(dup2(outfd,STDOUT_FILENO)==-1)
     {
         cout<<"Wrong when dup2 out stream\n";
         return(-4);
     }
-    if (!redirectionStatus) return 0;
+    close(outfd);
     return 0;
+}
+
+void outRedirection::reSet()
+{
+    redirectionStatus=false;
+    outFile=NULL;
 }
 
 bool pipeArr::creatPipe(int num)
