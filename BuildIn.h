@@ -18,12 +18,15 @@ public:
 
 class BuildIn {
 public:
-    Jobs jobs[100];
+    Jobs* jobs[100];
+    int numJob;
     BuildIn();
     void handleCD(command thisCommand);
     void handleExit(command thisCommand);
     void handleFG(command thisCommand);
     void handleJobs(command thisCommand); 
+    int storeJob(string command,int pid[]);
+    string getCurrentDic();
 };
 
 #endif	
