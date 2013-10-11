@@ -27,17 +27,11 @@ int executor::runCom(command& thisCom)
     if(thisCom.toks[0]->cat==8)
     {
         thisCom.getNextCom(cpos);
-        cout<<thisCom.pipeLen<<"\n";
         inRed.checkRed(thisCom,cpos,thisCom.tokLen);
-        cout<<thisCom.pipeLen<<"\n";
         outRed.checkRed(thisCom,cpos,thisCom.tokLen);
-        cout<<thisCom.pipeLen<<"\n";
         inRed.checkRed(thisCom,cpos,thisCom.tokLen);
-        cout<<thisCom.pipeLen<<"\n";
         outRed.checkRed(thisCom,cpos,thisCom.tokLen);
-        cout<<thisCom.pipeLen<<"\n";
         thisCom.getAllRecur(cpos);
-        cout<<thisCom.pipeLen<<"\n";
         //pipef.creatPipe(thisCom.pipeLen-1);
         //cout<<rpos<<" "<<thisCom.tokLen<<"\n";
         while(rpos<thisCom.pipeLen)
