@@ -2,6 +2,10 @@
 #include "Interpreter.h"
 #include <errno.h>
 #include <unistd.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <sys/types.h>
+#include <signal.h>
 
 BuildIn::BuildIn(){
     numJob=0;
@@ -61,17 +65,17 @@ void BuildIn::handleFG(command thisCommand){
     for(int i=0;i<numJob;i++){
         if(jobs[i]->pids[0]!=0){
             if(kill(jobs[i]->pids[0],SIGCONT)==-1){
-                cout << "Kill error\n"; 
+                cout << "Kill error\n";
             }
         }
         if(jobs[i]->pids[1]!=0){
             if(kill(jobs[i]->pids[1],SIGCONT)==-1){
-                cout << "Kill error\n"; 
+                cout << "Kill error\n";
             }
         }
         if(jobs[i]->pids[2]!=0){
             if(kill(jobs[i]->pids[2],SIGCONT)==-1){
-                cout << "Kill error\n"; 
+                cout << "Kill error\n";
             }
         }
     }

@@ -95,7 +95,6 @@ int executor::runCom(command& thisCom,BuildIn& shellBuild)
             }
         }
     }
-    cout<<myPid[0]<<" "<<myPid[1]<<"\n";
     if(debugmode) cout<<"Father return after wait\n";
 
     waitpid(myPid[0],NULL,WUNTRACED);

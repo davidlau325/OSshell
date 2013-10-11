@@ -3,6 +3,7 @@
 #include "Interpreter.h"
 #include "IORedirect.h"
 #include <sys/types.h>
+#include "BuildIn.h"
 
 class process
 {

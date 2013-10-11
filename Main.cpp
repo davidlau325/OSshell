@@ -10,14 +10,12 @@ int main()
 {
         command *coms[1000];
         string newCom,curLoc;
-        char curDir[1000];
         int comsLen=0;
         BuildIn* shellBuild;
         shellBuild=new BuildIn();
         executor shellExc;
         string cwd=shellBuild->getCurrentDic();
         cout<<"[3150 shell:"<<cwd<<"]$ ";
-        
         while(getline(cin,newCom))
         {
             coms[comsLen]=new command(newCom);

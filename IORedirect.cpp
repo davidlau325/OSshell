@@ -149,7 +149,6 @@ bool pipeArr::creatPipe(int num)
 bool pipeArr::setPipe(int comPos)
 {
     if(debugmode)cout<<"Set pipe "<<comPos<<"\n";
-    cout<<comPos<<" "<<pipeNum<<"\n";
     if(pipeNum==0) return true;
     if(comPos==0)
     {
