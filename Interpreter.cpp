@@ -262,7 +262,6 @@ int token::checkCat()
 
 token* command::nextArg(int& cpos)
 {
-    //if(debugmode) cout<<"In nextArg\n";
     if(cpos>=tokLen) return NULL;
     else
     {

@@ -52,7 +52,6 @@ int executor::runCom(command& thisCom,BuildIn& shellBuild)
         thisCom.getAllRecur(cpos);
         outRed.checkRed(thisCom,cpos,thisCom.tokLen);
         pipef.creatPipe(thisCom.pipeLen-1);
-        //cout<<rpos<<" "<<thisCom.tokLen<<"\n";
         while(rpos<thisCom.pipeLen)
         {
             myPid[rpos]=fork();
@@ -66,15 +65,11 @@ int executor::runCom(command& thisCom,BuildIn& shellBuild)
                 signal(SIGINT,SIG_DFL);
                 signal(SIGTSTP,SIG_DFL);
                 if(debugmode) cout<<"This is child "<<rpos<<"\n";
-                //cout<<"1 in "<<rpos<<"\n";
                 pipef.setPipe(rpos);
-                //cout<<"2 in "<<rpos<<"\n";
                 if(rpos==0)
                     if(inRed.setInRed()!=0) exit(-1);
-                //cout<<"3 in "<<rpos<<"\n";
                 if(rpos==thisCom.pipeLen-1)
                     if(outRed.setOutRed()!=0) exit(-1);
-                //cout<<"4 in "<<rpos<<"\n";
                 if(debugmode) cout<<"Child "<<rpos<<" "<<thisCom.pipeArg[rpos][0]<<" jump to new process\n";
                 if(execvp(thisCom.pipeArg[rpos][0],thisCom.pipeArg[rpos])==-1)
                 {

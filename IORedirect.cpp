@@ -153,10 +153,6 @@ bool pipeArr::setPipe(int comPos)
     if(comPos==0)
     {
         if(debugmode) cout<<"Set the first pipe\n";
-        close(pipefd[comPos][0]);
-        close(pipefd[comPos+1][0]);
-        close(pipefd[comPos+1][1]);
-        //close(STDOUT_FILENO);
         if(dup2(pipefd[comPos][1],STDOUT_FILENO)==-1)
         {
             cout<<"setPipe fail\n";
@@ -168,10 +164,12 @@ bool pipeArr::setPipe(int comPos)
     else if(comPos==pipeNum)
     {
         if(debugmode) cout<<"Set the last pipe\n";
-        close(pipefd[comPos-2][0]);
-        close(pipefd[comPos-2][1]);
+        for (int i=0; i<comPos-1; i++)
+        {
+            close(pipefd[i][0]);
+            close(pipefd[i][1]);
+        }
         close(pipefd[comPos-1][1]);
-        close(STDIN_FILENO);
         if (dup2(pipefd[comPos-1][0],STDIN_FILENO)==-1)
         {
             cout<<"setPipe fail\n";
@@ -183,9 +181,12 @@ bool pipeArr::setPipe(int comPos)
     }
     else
     {
-        close(STDIN_FILENO);
+        for(int i=0; i<comPos-1; i++)
+        {
+            close(pipefd[i][0]);
+            close(pipefd[i][1]);
+        }
         close(pipefd[comPos-1][1]);
-        close(pipefd[comPos][0]);
         if (dup2(pipefd[comPos-1][0],STDIN_FILENO)==-1)
         {
             cout<<"setPipe fail\n";
