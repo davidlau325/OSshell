@@ -33,7 +33,7 @@ class token
 {
 public:
 	string tok;
-	char *tokc;
+	char tokc[255];
 	int cat;
 	token();
 	token(string&);

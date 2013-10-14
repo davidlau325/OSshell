@@ -218,16 +218,9 @@ token::token()
 token::token(string &t)
 {
 	tok=t;
-	tokc=new char(t.length()+2);
 	strcpy(tokc,t.c_str());
 	cat=checkCat();
 }
-
-token::~token()
-{
-    free(tokc);
-}
-
 
 int token::checkCat()
 {
@@ -251,7 +244,6 @@ int token::checkCat()
 	if (tok=="cd" || tok=="exit" || tok=="fg" || tok=="jobs") return(6);
 	for (int i=0; i<l; i++)
 	{
-		c=tok[i];
 		if (c==9 || c==32 || c==62 || c==60 || c==124 || c==33 || c==96 ||c==39 || c==34) return 0;
 		if (c==42) star=true;
 	}

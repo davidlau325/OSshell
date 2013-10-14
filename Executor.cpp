@@ -27,8 +27,8 @@ int executor::runCom(command& thisCom,BuildIn& shellBuild)
     int myPid[10];
     int cpos=0,rpos=0;
     if(cpos>=thisCom.tokLen) return(0);
-    char path[]="/bin:/usr/bin:./";
-    setenv("PATH",path,1);
+    char path[]="PATH=/bin:/usr/bin:./";
+    putenv(path);
 
     if(thisCom.toks[0]->cat==9){
         if(thisCom.toks[0]->tok.compare("cd")==0){
