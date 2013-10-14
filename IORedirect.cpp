@@ -41,12 +41,12 @@ int inRedirection::setInRed()
     {
         if(errno==EACCES)
         {
-            cout<<inFile<<": permission denied\n";
+            cerr<<inFile<<": permission denied\n";
             return(-1);
         }
         else if(errno==ENOENT)
         {
-            cout<<inFile<<": no such file or directory\n";
+            cerr<<inFile<<": no such file or directory\n";
             return(-2);
         }
         else return(-3);
@@ -105,12 +105,12 @@ int outRedirection::setOutRed()
     {
         if(errno==EACCES)
         {
-            cout<<outFile<<": permission denied\n";
+            cerr<<outFile<<": permission denied\n";
             return -1;
         }
         else
         {
-            cout<<"Wrong when open the file\n";
+            cerr<<"Wrong when open the file\n";
             return(-3);
         }
     }

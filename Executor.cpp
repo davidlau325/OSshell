@@ -75,11 +75,11 @@ int executor::runCom(command& thisCom,BuildIn& shellBuild)
                 {
                     if(errno==ENOENT)
                     {
-                        cout<<thisCom.pipeArg[rpos][0]<<": command not found\n";
+                        cerr<<thisCom.pipeArg[rpos][0]<<": command not found\n";
                     }
                     else
                     {
-                        cout<<thisCom.pipeArg[rpos][0]<<": unknown error\n";
+                        cerr<<thisCom.pipeArg[rpos][0]<<": unknown error\n";
                     }
                 }
                 exit(-1);
